@@ -1,8 +1,8 @@
 use clap::Parser;
-use std::fs; // ‼️ Added fs to read the reference file
+use std::fs;
 use std::io::{self, Read};
 
-/// ‼️ Struct defining the command line arguments using Clap.
+
 /// This allows us to pass the project description and target stack easily.
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -15,11 +15,11 @@ struct Args {
     #[arg(short, long, default_value = "General Software")]
     stack: String,
 
-    /// ‼️ specific constraints or library preferences (e.g. "Use Tailwind", "Postgres DB")
+
     #[arg(short, long)]
     context: Option<String>,
 
-    /// ‼️ New: Path to a file containing code context (output from the code_context tool)
+
     #[arg(long)]
     code_context: Option<String>,
 
@@ -31,7 +31,7 @@ struct Args {
 fn main() {
     let args = Args::parse();
 
-    // ‼️ Logic to handle input source (Command line arg vs Stdin pipe)
+
     let project_description = if args.stdin {
         let mut buffer = String::new();
         io::stdin()
@@ -43,7 +43,7 @@ fn main() {
             .unwrap_or_else(|| "A generic software project".to_string())
     };
 
-    // ‼️ New: Read the code context file if provided
+
     let reference_code = if let Some(path) = &args.code_context {
         fs::read_to_string(path).unwrap_or_else(|_| {
             eprintln!("⚠️ Warning: Could not read code context file: {}", path);
@@ -53,7 +53,7 @@ fn main() {
         String::new()
     };
 
-    // ‼️ Generate the Prompt / Design Doc (Passing the new reference_code arg)
+
     let extra_context = args.context.unwrap_or_default();
     let design_doc = generate_design_prompt(
         &project_description,
@@ -62,11 +62,11 @@ fn main() {
         &reference_code,
     );
 
-    // ‼️ Output directly to stdout so it can be piped or copied
+
     println!("{}", design_doc);
 }
 
-/// ‼️ This function constructs the actual text that will be fed into the LLM.
+
 /// It wraps the user's simple idea in a wrapper of professional engineering constraints.
 fn generate_design_prompt(
     description: &str,
@@ -74,14 +74,14 @@ fn generate_design_prompt(
     extra_context: &str,
     reference_code: &str,
 ) -> String {
-    // ‼️ Dynamic Logic: tailored entry point rule based on stack
+
     let entry_point_rule = if stack.to_lowercase().contains("rust") {
         "6.  **Entry Point Structure:** Refactor the code so that main.rs is a minimal entry point. Move the application logic into a module named app. Use src/app.rs as the module root."
     } else {
         "6.  **Entry Point Structure:** Keep the main entry file (e.g., index.js, main.py) minimal. Delegate initialization and logic to a dedicated App class or module."
     };
 
-    // ‼️ Dynamic Logic: specific library constraints section
+
     let mut specific_constraints = String::new();
     if !extra_context.is_empty() {
         specific_constraints = format!(
@@ -90,7 +90,7 @@ fn generate_design_prompt(
         );
     }
 
-    // ‼️ Dynamic Logic: reference code section (handles the XML-like output from code_context)
+
     let mut reference_section = String::new();
     if !reference_code.is_empty() {
         reference_section = format!(
