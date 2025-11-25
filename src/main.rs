@@ -67,7 +67,7 @@ fn generate_design_prompt(
     reference_code: &str,
 ) -> String {
     let entry_point_rule = if stack.to_lowercase().contains("rust") {
-        "6.  **Entry Point Structure:** Refactor the code so that main.rs is a minimal entry point. Move the application logic into a module named app. Use src/app.rs as the module root."
+        "6.  **Entry Point Structure:** Refactor the code so that main.rs is a minimal entry point. Move the application logic into a module folder named app. Use src/app.rs as the module root."
     } else {
         "6.  **Entry Point Structure:** Keep the main entry file (e.g., index.js, main.py) minimal. Delegate initialization and logic to a dedicated App class or module."
     };
