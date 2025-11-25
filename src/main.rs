@@ -13,6 +13,9 @@ struct Args {
     #[arg(short, long, default_value = "General Software")]
     stack: String,
 
+    #[arg(short, long)]
+    context: Option<String>,
+
     /// If set, reads the description from Stdin instead of an argument
     #[arg(long)]
     stdin: bool,
@@ -32,13 +35,29 @@ fn main() {
             .unwrap_or_else(|| "A generic software project".to_string())
     };
 
-    let design_doc = generate_design_prompt(&project_description, &args.stack);
+    let extra_context = args.context.unwrap_or_default();
+    let design_doc = generate_design_prompt(&project_description, &args.stack, &extra_context);
 
     println!("{}", design_doc);
 }
 
 /// It wraps the user's simple idea in a wrapper of professional engineering constraints.
-fn generate_design_prompt(description: &str, stack: &str) -> String {
+fn generate_design_prompt(description: &str, stack: &str, extra_context: &str) -> String {
+    let entry_point_rule = if stack.to_lowercase().contains("rust") {
+        "6.  **Entry Point Structure:** Refactor the code so that main.rs is a minimal entry point. Move the application logic into a module named app. Use src/app.rs as the module root."
+    } else {
+        "6.  **Entry Point Structure:** Keep the main entry file (e.g., index.js, main.py) minimal. Delegate initialization and logic to a dedicated App class or module."
+    };
+
+    let context_section = if !extra_context.is_empty() {
+        format!(
+            "\n## 4. SPECIFIC LIBRARY/CONTEXT CONSTRAINTS\nUser provided constraints:\n- {}",
+            extra_context
+        )
+    } else {
+        String::new()
+    };
+
     format!(
         r#"# PROMPT FOR LLM: PROJECT ARCHITECTURE & CODE GENERATION
 
@@ -48,7 +67,7 @@ Your goal is to take the project description below and produce a complete, produ
 
 ## 2. PROJECT DESCRIPTION
 **User Requirement:**
-"{description}"
+"{description}"{context_section}
 
 ## 3. PREDETERMINED ENGINEERING REQUIREMENTS
 Please adhere to the following strict design principles:
@@ -58,8 +77,9 @@ Please adhere to the following strict design principles:
 3.  **Type Safety:** Leverage the type system to prevent runtime errors where possible.
 4.  **Comments:** Add brief documentation for complex logic, but self-documenting variable names are preferred.
 5.  **Configuration:** Avoid magic numbers. Use constants or configuration files/env variables.
-6.  **Entry Point Structure:** Refactor the code so that main.rs is a minimal entry point. Move the application logic into a module named app. Use src/app.rs as the module root (sibling file approach) to expose the submodules located inside the src/app/ folder. app.rs should act as the facade that initializes the database, config, and state.
+{entry_point_rule}
 7.  **Refactoring Strategy:** Apply 'Extract Method' aggressively. If a function is longer than 30 lines or handles multiple responsibilities, break it down into smaller, named helper functions.
+8.  **Testing:** Include a testing strategy. Where applicable, provide basic unit tests for core logic.
 
 ## 4. REQUIRED OUTPUT FORMAT
 Please response in the following order:
@@ -82,6 +102,9 @@ Please response in the following order:
 *Please begin by analyzing the User Requirement and generating the Phase 1 Design.*
 "#,
         stack = stack,
-        description = description
+        description = description,
+        context_section = context_section,
+        entry_point_rule = entry_point_rule
     )
 }
+
