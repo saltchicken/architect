@@ -1,5 +1,5 @@
 // src/app.rs
-// ‼️ Module Root: Orchestrates the application flow.
+
 
 pub mod cli;
 pub mod context;
@@ -9,20 +9,20 @@ use anyhow::Result;
 use clap::Parser;
 use std::io::{self, Read};
 
-// ‼️ Removed unused `PromptMode` import to fix warning
+
 use self::cli::Args;
 use self::context::scan_directory;
 use self::generator::{GeneratorContext, generate_prompt};
 
 /// Main application logic
 pub fn run() -> Result<()> {
-    // ‼️ Parse arguments using the refactored CLI module
+
     let args = Args::parse();
 
-    // ‼️ Handle Stdin vs Argument description
+
     let project_description = get_description(&args)?;
 
-    // ‼️ Handle Context Scanning (moved to helper module)
+
     let reference_code = if let Some(path) = args.scan {
         eprintln!("🔍 Scanning directory: {:?}", path);
         scan_directory(path)?
@@ -37,7 +37,7 @@ pub fn run() -> Result<()> {
         reference_code,
     };
 
-    // ‼️ Generate output based on the selected Mode
+
     let output = generate_prompt(args.mode, &context);
 
     println!("{}", output);

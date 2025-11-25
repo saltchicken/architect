@@ -1,5 +1,5 @@
 // src/app/generator.rs
-// ‼️ Contains the Prompt Template logic.
+
 
 use super::cli::PromptMode;
 
@@ -11,17 +11,17 @@ pub struct GeneratorContext {
 }
 
 pub fn generate_prompt(mode: PromptMode, ctx: &GeneratorContext) -> String {
-    // ‼️ Route to the specific template based on the mode
+
     match mode {
         PromptMode::Architecture => generate_architecture_prompt(ctx),
         PromptMode::CodeReview => generate_review_prompt(ctx),
         PromptMode::Refactor => generate_refactor_prompt(ctx),
-        // ‼️ Added missing match arm to fix compilation error
+
         PromptMode::Readme => generate_readme_prompt(ctx),
     }
 }
 
-// ‼️ The original "Architecture" prompt logic
+
 fn generate_architecture_prompt(ctx: &GeneratorContext) -> String {
     let entry_point_rule = if ctx.stack.to_lowercase().contains("rust") {
         "6.  **Entry Point Structure:** Refactor the code so that main.rs is a minimal entry point. Move the application logic into a module folder named app. Use src/app.rs as the module root."
@@ -74,7 +74,7 @@ Please adhere to the following strict design principles:
     )
 }
 
-// ‼️ New Feature: Code Review Template
+
 fn generate_review_prompt(ctx: &GeneratorContext) -> String {
     let constraints = format_constraints(&ctx.specific_constraints);
     let reference = format_reference(&ctx.reference_code);
@@ -107,7 +107,7 @@ Your goal is to review the provided code/requirements and identify security flaw
     )
 }
 
-// ‼️ New Feature: Refactoring Template
+
 fn generate_refactor_prompt(ctx: &GeneratorContext) -> String {
     let constraints = format_constraints(&ctx.specific_constraints);
     let reference = format_reference(&ctx.reference_code);
@@ -138,7 +138,7 @@ Refactor the codebase described below to meet modern standards (Clean Code, SOLI
     )
 }
 
-// ‼️ Added missing Readme Template function to resolve missing match arm
+
 fn generate_readme_prompt(ctx: &GeneratorContext) -> String {
     // Default style since we don't have a dedicated CLI arg for style yet
     let style = "Professional and Concise";

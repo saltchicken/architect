@@ -1,5 +1,5 @@
 // src/app/cli.rs
-// ‼️ Defines the Command Line Interface and the new PromptMode enum.
+
 
 use clap::{Parser, ValueEnum};
 use std::path::PathBuf;
@@ -27,7 +27,7 @@ pub struct Args {
     #[arg(long)]
     pub stdin: bool,
 
-    /// ‼️ New Feature: Select the type of prompt to generate
+
     #[arg(short, long, value_enum, default_value_t = PromptMode::Architecture)]
     pub mode: PromptMode,
 }
@@ -40,6 +40,6 @@ pub enum PromptMode {
     CodeReview,
     /// Generate a prompt for refactoring specific logic
     Refactor,
-    /// ‼️ New: Generate a comprehensive README based on code analysis
+
     Readme,
 }
