@@ -4,7 +4,11 @@ use clap::{Parser, Subcommand};
 #[command(author, version, about, long_about = None)]
 pub struct Args {
     #[command(subcommand)]
-    pub command: Commands,
+    pub command: Option<Commands>,
+
+    /// Sets a custom prompt
+    #[arg(short, long)]
+    pub prompt: Option<String>,
 }
 
 #[derive(Subcommand, Debug)]

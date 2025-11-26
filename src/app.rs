@@ -2,10 +2,10 @@ pub mod cli;
 pub mod context;
 pub mod generator;
 
-use self::cli::{Args, Commands};
+use self::cli::{Args, Commands, GenericArgs};
 use self::context::scan_directory;
 use anyhow::Result;
-use clap::Parser;
+use clap::{CommandFactory, Parser};
 use std::env;
 
 use self::generator::{
@@ -19,7 +19,19 @@ pub fn run() -> Result<()> {
 
     let reference_code = scan_directory(env::current_dir()?)?;
 
-    let output = match &args.command {
+    let command = match args.command {
+        Some(cmd) => cmd,
+        None => {
+            if let Some(prompt) = args.prompt {
+                Commands::Generic(GenericArgs { prompt })
+            } else {
+                Args::command().print_help()?;
+                return Ok(());
+            }
+        }
+    };
+
+    let output = match &command {
         Commands::Generic(cmd_args) => generate_generic_prompt(cmd_args, &reference_code),
         Commands::Architecture(cmd_args) => generate_architecture_prompt(cmd_args, &reference_code),
         Commands::CodeReview(cmd_args) => generate_review_prompt(cmd_args, &reference_code),
