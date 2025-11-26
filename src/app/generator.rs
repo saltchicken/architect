@@ -1,4 +1,15 @@
-use super::cli::{ArchitectureArgs, CodeReviewArgs, ReadmeArgs, RefactorArgs};
+use super::cli::{ArchitectureArgs, CodeReviewArgs, GenericArgs, ReadmeArgs, RefactorArgs};
+
+pub fn generate_generic_prompt(args: &GenericArgs, reference_code: &str) -> String {
+    format!(
+        r#"{prompt}
+
+{reference}
+        "#,
+        prompt = args.prompt,
+        reference = reference_code,
+    )
+}
 
 pub fn generate_architecture_prompt(args: &ArchitectureArgs, reference_code: &str) -> String {
     let description = args
@@ -199,4 +210,3 @@ The user provided the following context:
         content = code
     )
 }
-

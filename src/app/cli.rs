@@ -9,6 +9,9 @@ pub struct Args {
 
 #[derive(Subcommand, Debug)]
 pub enum Commands {
+    /// Generate a generic prompt
+    Generic(GenericArgs),
+
     /// Generate a full project architecture and implementation plan
     Architecture(ArchitectureArgs),
 
@@ -58,3 +61,9 @@ pub struct ReadmeArgs {
     pub details: Option<String>,
 }
 
+#[derive(Parser, Debug)]
+pub struct GenericArgs {
+    /// The prompt to generate
+    #[arg(short, long)]
+    pub prompt: String,
+}
