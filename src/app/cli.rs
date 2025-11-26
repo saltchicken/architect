@@ -1,23 +1,13 @@
-use clap::{Parser, Subcommand}; // ‼️ Changed ValueEnum to Subcommand
-use std::path::PathBuf;
+use clap::{Parser, Subcommand};
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 pub struct Args {
-    /// Directory to scan for code context (Global argument)
-    #[arg(long)]
-    pub scan: Option<PathBuf>,
-
-    /// Read input from Stdin (Global argument)
-    #[arg(long)]
-    pub stdin: bool,
-
-    // ‼️ Replaced the 'mode' and generic optional fields with a Subcommand
     #[command(subcommand)]
     pub command: Commands,
 }
 
-#[derive(Subcommand, Debug)] // ‼️ Derived Subcommand instead of ValueEnum
+#[derive(Subcommand, Debug)]
 pub enum Commands {
     /// Generate a full project architecture and implementation plan
     Architecture(ArchitectureArgs),
@@ -31,8 +21,6 @@ pub enum Commands {
     /// Generate a prompt for a README file
     Readme(ReadmeArgs),
 }
-
-// ‼️ Defined specific structs for each command to allow custom args per generator
 
 #[derive(Parser, Debug)]
 pub struct ArchitectureArgs {
@@ -69,3 +57,4 @@ pub struct ReadmeArgs {
     #[arg(short, long)]
     pub details: Option<String>,
 }
+

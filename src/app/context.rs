@@ -1,5 +1,3 @@
-// src/app/context.rs
-
 use anyhow::{Context, Result};
 use code_context::app::{generate, models::RuntimeConfig};
 use std::path::PathBuf;

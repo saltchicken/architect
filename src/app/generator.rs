@@ -1,9 +1,5 @@
-// src/app/generator.rs
-use super::cli::{ArchitectureArgs, CodeReviewArgs, ReadmeArgs, RefactorArgs}; // ‼️ Imported new structs
+use super::cli::{ArchitectureArgs, CodeReviewArgs, ReadmeArgs, RefactorArgs};
 
-// ‼️ Removed generic GeneratorContext struct as it is no longer needed
-
-// ‼️ Updated function signatures to take specific args and the reference code string
 pub fn generate_architecture_prompt(args: &ArchitectureArgs, reference_code: &str) -> String {
     let description = args
         .description
@@ -52,7 +48,6 @@ Please adhere to the following strict design principles:
 }
 
 pub fn generate_review_prompt(args: &CodeReviewArgs, reference_code: &str) -> String {
-    // ‼️ using args.focus specific to this command
     let focus = args.focus.as_deref().unwrap_or("General Code Health");
     let reference = format_reference(reference_code);
 
@@ -104,7 +99,7 @@ Refactor the codebase described below to meet modern standards (Clean Code, SOLI
 1.  **Before/After Analysis:** Briefly explain why the change is needed.
 2.  **Refactored Code:** Complete, compile-ready files.
 "#,
-        goal = args.goal, // ‼️ Using mandatory arg specific to Refactor
+        goal = args.goal,
         reference = reference,
     )
 }
@@ -116,7 +111,7 @@ pub fn generate_readme_prompt(args: &ReadmeArgs, reference_code: &str) -> String
         You are an expert Technical Writer and Developer Advocate.\n\
         Your tone should be **{}**.\n\
         Your goal is to analyze the provided source code and generate a comprehensive, production-ready README.md file.",
-        args.style // ‼️ Using style arg specific to Readme
+        args.style
     );
 
     let constraints = if let Some(details) = &args.details {
@@ -204,3 +199,4 @@ The user provided the following context:
         content = code
     )
 }
+
