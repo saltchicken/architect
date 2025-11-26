@@ -1,14 +1,12 @@
 // src/app/context.rs
 
-
 use anyhow::{Context, Result};
 use code_context::app::{generate, models::RuntimeConfig};
 use std::path::PathBuf;
 
 pub fn scan_directory(path: PathBuf) -> Result<String> {
-
     let config = RuntimeConfig {
-        include: vec!["**/*".to_string()],
+        include: vec!["**/*.rs".to_string(), "**/*.toml".to_string()],
         exclude: vec![],
         include_in_tree: vec![],
         tree_only_output: false,
