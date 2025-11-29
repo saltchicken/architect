@@ -7,3 +7,6 @@ edition = "2024"
 clap = { version = "4.5", features = ["derive"] }
 code-context = { git = "https://github.com/saltchicken/code-context.git" }
 anyhow = "1.0"
+tokio = { version = "1.48.0", features = ["full"] }
+dotenvy = "0.15.7"
+sql-context = { git = "https://github.com/saltchicken/sql-context.git" }

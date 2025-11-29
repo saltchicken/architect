@@ -14,10 +14,13 @@ use self::generator::{
 };
 
 /// Main application logic
-pub fn run() -> Result<()> {
+
+pub async fn run() -> Result<()> {
     let args = Args::parse();
-    // ‼️ Change: Pass the preset argument from CLI to the scanner
-    let reference_code = scan_directory(env::current_dir()?, args.preset.clone())?;
+
+
+    let reference_code = scan_directory(env::current_dir()?, args.preset.clone()).await?;
+
     let command = match args.command {
         Some(cmd) => cmd,
         None => {
