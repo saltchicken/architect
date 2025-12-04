@@ -26,7 +26,7 @@ Your goal is to take the project description below and produce a complete, produ
 "{description}"
 {constraints}
 
-## 5. PREDETERMINED ENGINEERING REQUIREMENTS
+## 3. PREDETERMINED ENGINEERING REQUIREMENTS
 Please adhere to the following strict design principles:
 1.  **Modularity:** Break code into logical files and functions.
 2.  **Error Handling:** Rigorous error handling (no silent failures).
@@ -37,7 +37,7 @@ Please adhere to the following strict design principles:
 7.  **Refactoring Strategy:** Aggressive 'Extract Method'.
 8.  **Testing:** Include a testing strategy.
 
-## 6. REQUIRED OUTPUT FORMAT
+## 4. REQUIRED OUTPUT FORMAT
 ### Phase 1: Architecture Design
 * **File Structure**
 * **Core Data Models**
