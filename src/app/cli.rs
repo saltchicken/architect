@@ -12,6 +12,9 @@ pub struct Args {
 
     #[arg(long)]
     pub preset: Option<String>,
+
+    #[arg(long)]
+    pub improve: bool,
 }
 
 #[derive(Subcommand, Debug)]
@@ -26,6 +29,8 @@ pub enum Commands {
     Refactor(RefactorArgs),
     /// Generate a prompt for a README file
     Readme(ReadmeArgs),
+    /// Generate a prompt to improve the project
+    Improve,
 }
 // ... existing code ...
 #[derive(Parser, Debug)]

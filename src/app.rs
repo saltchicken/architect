@@ -9,15 +9,13 @@ use clap::{CommandFactory, Parser};
 use std::env;
 
 use self::generator::{
-    generate_architecture_prompt, generate_generic_prompt, generate_readme_prompt,
-    generate_refactor_prompt, generate_review_prompt,
+    generate_architecture_prompt, generate_generic_prompt, generate_improve_prompt,
+    generate_readme_prompt, generate_refactor_prompt, generate_review_prompt,
 };
 
 /// Main application logic
-
 pub async fn run() -> Result<()> {
     let args = Args::parse();
-
 
     let reference_code = scan_directory(env::current_dir()?, args.preset.clone()).await?;
 
@@ -26,6 +24,8 @@ pub async fn run() -> Result<()> {
         None => {
             if let Some(prompt) = args.prompt {
                 Commands::Generic(GenericArgs { prompt })
+            } else if args.improve {
+                Commands::Improve
             } else {
                 Args::command().print_help()?;
                 return Ok(());
@@ -39,6 +39,7 @@ pub async fn run() -> Result<()> {
         Commands::CodeReview(cmd_args) => generate_review_prompt(cmd_args, &reference_code),
         Commands::Refactor(cmd_args) => generate_refactor_prompt(cmd_args, &reference_code),
         Commands::Readme(cmd_args) => generate_readme_prompt(cmd_args, &reference_code),
+        Commands::Improve => generate_improve_prompt(&reference_code),
     };
 
     println!("{}", output);

@@ -1,8 +1,11 @@
 use super::cli::{ArchitectureArgs, CodeReviewArgs, GenericArgs, ReadmeArgs, RefactorArgs};
 
 pub fn generate_generic_prompt(args: &GenericArgs, reference_code: &str) -> String {
-
     format!("{}\n\n{}", args.prompt, reference_code)
+}
+
+pub fn generate_improve_prompt(reference_code: &str) -> String {
+    format!("How can I improve this project?\n\n{}", reference_code)
 }
 
 pub fn generate_architecture_prompt(args: &ArchitectureArgs, reference_code: &str) -> String {
@@ -204,3 +207,4 @@ The user provided the following context:
         content = code
     )
 }
+
