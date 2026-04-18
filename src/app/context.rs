@@ -5,7 +5,11 @@ use code_context::build_config;
 use sql_context::{AppConfig, generate_report};
 use std::path::PathBuf;
 
-pub async fn scan_directory(path: PathBuf, preset_override: Option<String>) -> Result<String> {
+pub async fn scan_directory(
+    path: PathBuf,
+    preset_override: Option<String>,
+    collect_samples: bool,
+) -> Result<String> {
     let folder_name = path.file_name().and_then(|n| n.to_str());
     let preset_key = preset_override.as_deref().or(folder_name);
 
@@ -24,7 +28,7 @@ pub async fn scan_directory(path: PathBuf, preset_override: Option<String>) -> R
         let sql_config = AppConfig {
             db_url,
             db_name,
-            collect_samples: false,
+            collect_samples,
             ignore_tables: vec!["sqledger_scripts".to_string()],
         };
 

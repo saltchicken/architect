@@ -17,9 +17,8 @@ use self::generator::{
 pub async fn run() -> Result<()> {
     let args = Args::parse();
 
-
     let preset = args.preset.clone();
-
+    let samples = args.samples;
 
     let command = match args.command {
         Some(cmd) => cmd,
@@ -35,11 +34,10 @@ pub async fn run() -> Result<()> {
         }
     };
 
-
     let should_scan = !matches!(command, Commands::Architecture(_));
 
     let reference_code = if should_scan {
-        scan_directory(env::current_dir()?, preset).await?
+        scan_directory(env::current_dir()?, preset, samples).await?
     } else {
         String::new()
     };

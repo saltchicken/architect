@@ -15,6 +15,10 @@ pub struct Args {
 
     #[arg(long)]
     pub improve: bool,
+
+    /// Collect samples from database tables
+    #[arg(long)]
+    pub samples: bool,
 }
 
 #[derive(Subcommand, Debug)]
@@ -32,7 +36,7 @@ pub enum Commands {
     /// Generate a prompt to improve the project
     Improve,
 }
-// ... existing code ...
+
 #[derive(Parser, Debug)]
 pub struct ArchitectureArgs {
     /// The main idea or description of the project
